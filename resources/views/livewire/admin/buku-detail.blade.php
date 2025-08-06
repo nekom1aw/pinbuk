@@ -192,7 +192,7 @@
             @endforeach
         </ul>
         @else
-        <p class="text-red-500 italic">Belum ada peminjaman aktif untuk buku ini.</p>
+        <p class="text-red-500 italic">Belum ada peminjaman aktif untuk buku ini..</p>
         @endif
     </div>
 
