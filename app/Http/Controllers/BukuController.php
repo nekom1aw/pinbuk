@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB; 
+use Illuminate\Support\Facades\DB;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Illuminate\Support\Facades\Storage; 
+use Illuminate\Support\Facades\Storage;
 
 class BukuController extends Controller
 {
@@ -17,13 +17,19 @@ class BukuController extends Controller
     }
     public function kategori()
     {
-        return view('admin.kategori-buku-index'); 
+        return view('admin.kategori-buku-index');
     }
 
     public function katebuku()
     {
         return view('admin.kategori-buku');
     }
+
+    public function view($id)
+    {
+        return view('admin.buku-view', ['id' => $id]);
+    }
+
     public function katedetail($id)
     {
         return view('admin.kategori-detail', ['kategoriId' => $id]);
@@ -43,8 +49,8 @@ class BukuController extends Controller
             'subkategori2Id' => $sub2,
         ]);
     }
-    
-    
+
+
 
 
 
@@ -53,7 +59,7 @@ class BukuController extends Controller
     {
         return view('admin.buku-tambah');
     }
- 
+
 
     // Menampilkan form edit buku
     public function edit($id)

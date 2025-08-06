@@ -35,6 +35,7 @@ Route::prefix('admin')->name('admin.')->middleware([UserAccess::class . ':admin'
         Route::get('create', [BukuController::class, 'create'])->name('create');
         Route::post('/', [BukuController::class, 'store'])->name('store');
         Route::get('{id}/detail', [BukuController::class, 'show'])->name('detail');
+        Route::get('{id}/view', [BukuController::class, 'view'])->name('view');
         Route::get('{id}/edit', [BukuController::class, 'edit'])->name('edit');
         Route::put('{id}', [BukuController::class, 'update'])->name('update');
         Route::delete('{id}', [BukuController::class, 'destroy'])->name('destroy');
@@ -76,6 +77,7 @@ Route::prefix('user')->name('user.')->middleware([UserAccess::class . ':user'])-
     Route::prefix('buku')->name('buku.')->group(function () {
         Route::get('/', [UserAcessController::class, 'indexbuku'])->name('index');
         Route::get('{id}/detail', [UserAcessController::class, 'show'])->name('detail');
+        Route::get('{id}/view', [UserAcessController::class, 'view'])->name('view');
         Route::get('{id}/katalog', [UserAcessController::class, 'katalog'])->name('katalog');
         Route::get('/search/{key}', [UserAcessController::class, 'key'])->name('user.search.result');
         
@@ -90,5 +92,5 @@ Route::prefix('user')->name('user.')->middleware([UserAccess::class . ':user'])-
 
 
 Route::get('/', function () {
-    return view('home');
+    return view('welcome');
 });

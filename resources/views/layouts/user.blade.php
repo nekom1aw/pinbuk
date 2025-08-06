@@ -68,20 +68,20 @@
 
         <!-- User Info -->
         <div
-          x-data="{ dropdownOpen: false, isMobile: false }"
+          x-data="{ dropdownOpen: false, isMobile: window.innerWidth < 640 }"
           x-init="
-    isMobile = window.innerWidth < 640;
-    window.addEventListener('resize', () => {
     window.addEventListener('resize', () => {
       isMobile = window.innerWidth < 640;
-      if (!isMobile) dropdownOpen = false; // reset dropdown saat pindah layar
+      if (!isMobile) dropdownOpen = false;
     });
   "
           @mouseenter="if(!isMobile) dropdownOpen = true"
           @mouseleave="if(!isMobile) dropdownOpen = false"
           @click="if(isMobile) dropdownOpen = !dropdownOpen"
           @click.away="dropdownOpen = false"
-          class="relative flex items-center space-x-2 sm:space-x-2 flex-shrink-0 cursor-pointer select-none sm:mr-0 mr-3 sm:ml-0 ml-auto">
+          class="relative flex items-center space-x-2 sm:space-x-2 flex-shrink-0 cursor-pointer select-none sm:mr-0 mr-3 sm:ml-0 ml-auto"
+          wire:ignore>
+
           <!-- Avatar -->
           @if(isset($user))
           <!-- Avatar -->
@@ -176,6 +176,7 @@
     x-transition
     x-cloak
     @click.self="showModal = false"
+    
     class="fixed inset-0 z-[199999999] flex items-start justify-center pt-24 px-4 sm:px-6 md:px-60 lg:px-82 xl:px-114">
     <div class="bg-white border border-gray-300 shadow-lg w-full 
               px-4 sm:px-6 md:p-8 lg:p-6 xl:p-6">
@@ -232,9 +233,10 @@
         <!-- Modal -->
         <div
           x-show="showModal"
+          
           class="fixed inset-0  flex items-center justify-center z-50">
           <div class="bg-white p-6   shadow-md w-80 relative">
-            <button @click="showModal = false" class="absolute top-2 right-3 text-gray-600 hover:text-black">
+            <button @click="showModal = false" @click.outside="showModal = false" class="absolute top-2 right-3 text-gray-600 hover:text-black">
               ✕
             </button>
             <h2 class="text-lg font-bold mb-4 text-center">Pilih Metode Donasi</h2>

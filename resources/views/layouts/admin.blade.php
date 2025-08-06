@@ -5,6 +5,9 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
   </script>
   <title>@yield('title', 'Dashboard')</title>
+  <link rel="stylesheet" href="/dflip/css/dflip.min.css">
+  <script src="/dflip/js/libs/jquery.min.js"></script>
+  <script src="/dflip/js/dflip.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;1,100&display=swap');
 
@@ -17,7 +20,7 @@
   @vite('resources/css/app.css')
   @livewireStyles
 
- 
+
 </head>
 
 <body x-data="{ showModal: false }" @keydown.escape.window="showModal = false" class="flex flex-col min-h-screen">
@@ -40,8 +43,8 @@
       <div class="flex items-center gap-4 sm:gap-8 md:gap-14 lg:gap-20 xl:gap-34">
         <!-- Logo -->
         <div class="w-16 h-12 sm:w-20 sm:h-14 lg:w-24 lg:h-16 flex items-center justify-center">
-           <a href="{{ route('admin.admin.users.index') }}">
-          <img alt="Auriga company logo in gray background with white text, rectangular shape with stylized text Auriga Nusantara" src="{{asset('foto/Logo Auriga.png') }}" class="w-full h-full object-contain" />
+          <a href="{{ route('admin.admin.users.index') }}">
+            <img alt="Auriga company logo in gray background with white text, rectangular shape with stylized text Auriga Nusantara" src="{{asset('foto/Logo Auriga.png') }}" class="w-full h-full object-contain" />
           </a>
         </div>
 
@@ -110,8 +113,8 @@
           x-show="dropdownOpen"
           @click.away="dropdownOpen = false"
           class="absolute right-0 top-full mt-2 w-34 bg-white border border-gray-300 z-50 shadow-md"
-          x-transition> 
- 
+          x-transition>
+
 
           <a href="{{ route('admin.admin.users.index')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-100 hover:text-red-700">Pengguna</a>
           <a href="{{ route('admin.admin.buku.index')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-100 hover:text-red-700">buku</a>

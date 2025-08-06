@@ -5,7 +5,7 @@ namespace App\Livewire\Admin;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
-// use SimpleSoftwareIO\QrCode\Facades\QrCode;
+// use SimpleSoftwareIO\QrCode\Facades\QrCode; 
 use Illuminate\Validation\Rule;
 
 class BukuTambah extends Component
@@ -20,6 +20,7 @@ class BukuTambah extends Component
     public $newTag, $tags = [];
     public $tampil = 'tidak';
     public $position_foto = 'center';
+    public $jenis_buku, $file;
 
     public function mount()
     {
@@ -44,12 +45,13 @@ class BukuTambah extends Component
 
     public function store()
     {
-        $this->validate([
+        $rules = [
             'nama_buku' => 'required|string|max:255',
             'penulis' => 'required|string|max:255',
             'terbit_tahun' => 'required|digits:4|integer|min:1000|max:' . date('Y'),
             'penerbit' => 'required|string|max:255',
             'ringkasan' => 'nullable|string',
+            'jenis_buku' => 'required|in:digital,cetak',
             'kategori' => 'required|exists:kategori_buku,id',
             'foto_buku' => 'nullable|image|max:2048',
             'kondisi' => ['required', Rule::in(['Baru', 'Bekas'])],
@@ -57,13 +59,26 @@ class BukuTambah extends Component
             'tags' => 'nullable|array|max:5',
             'position_foto' => ['required', Rule::in(['top', 'center', 'bottom'])],
             'tampil' => 'required|in:ya,tidak',
+        ];
 
+        // Tambahkan aturan file hanya jika buku digital
+        if ($this->jenis_buku === 'digital') {
+            $rules['file'] = 'required|file|mimes:pdf|max:20480';
+        }
 
-        ]);
+        $this->validate($rules);
 
+        
         $lastBook = DB::table('buku')->latest('id')->first();
         $nextNumber = $lastBook ? intval(substr($lastBook->kode_uniq, 2)) + 1 : 1;
         $kodeUniq = 'B-' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
+
+        $filePath = null;
+        if ($this->jenis_buku === 'digital' && $this->file) {
+            $storedPath = $this->file->store('pdf', 'public');
+            $filePath = '/storage/' . $storedPath;
+        }
+
 
         $fotoBukuPath = null;
         if ($this->foto_buku) {
@@ -88,6 +103,8 @@ class BukuTambah extends Component
             'kondisi' => $this->kondisi,
             'catatan' => $this->catatan,
             'tags' => json_encode($this->tags),
+            'jenis_buku' => $this->jenis_buku,
+            'file' => $filePath,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

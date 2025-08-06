@@ -11,25 +11,34 @@
         </div>
         @endif
 
-        <div class="flex justify-between items-center mb-4">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
             <h1 class="text-2xl font-bold">Katalog Buku</h1>
-            <div class="flex gap-2">
-                <a href="buku/create" class="bg-blue-500 text-white px-3 py-1.5   hover:bg-blue-600">
+
+            <div class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2">
+                <a href="buku/create"
+                    class="bg-blue-500 text-white px-3 py-1.5 text-sm hover:bg-blue-600 w-full sm:w-auto sm:min-w-[12rem] text-center">
                     <i class="fas fa-plus mr-1"></i> Tambah
                 </a>
-                <a wire:click="exportCsv" class="bg-green-500 text-white px-3 py-1.5   hover:bg-green-600 cursor-pointer">
+
+                <button wire:click="exportCsv"
+                    class="bg-green-500 text-white px-3 py-1.5 text-sm hover:bg-green-600 cursor-pointer w-full sm:w-auto sm:min-w-[12rem] text-center">
                     <i class="fas fa-print mr-1"></i> Print
-                </a>
+                </button>
+
                 <a href="{{ url('/admin/buku/kategori') }}"
-                    class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4   transition duration-300">
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-3 py-1.5 w-full sm:w-auto sm:min-w-[12rem] text-center">
                     Kelola Kategori Buku
                 </a>
+
                 <a href="{{ url('/admin/buku/kategori-buku') }}"
-                    class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4   transition duration-300">
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-3 py-1.5 w-full sm:w-auto sm:min-w-[12rem] text-center">
                     Lihat Kategori Buku
                 </a>
             </div>
+ 
+
         </div>
+
 
         <div class="mb-4">
             <input

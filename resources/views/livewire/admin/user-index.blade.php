@@ -36,11 +36,12 @@
                     <img
                         src="{{ $user->foto }}"
                         class="h-16 w-16 rounded-full object-cover border-4 
-        @if($user->status === 'green') border-green-600 
-        @elseif($user->status === 'yellow') border-orange-500 
-        @elseif($user->status === 'red') border-red-800 
-        @elseif($user->status === 'black') border-gray-800 
-        @else border-gray-300 @endif" />
+                        @if($user->status === 'gray') border-gray-400 
+                        @elseif($user->status === 'green') border-auriga 
+                        @elseif($user->status === 'yellow') border-orange-500 
+                        @elseif($user->status === 'red') border-red-800 
+                        @elseif($user->status === 'black') border-gray-800 
+                        @else border-gray-300 @endif" />
 
                 </div>
                 <div class="mt-2 sm:mt-0 sm:ml-4 flex-1 text-center sm:text-left">
@@ -135,18 +136,7 @@
                         </select>
                     </div>
 
-                    {{-- Status --}}
-                    <div>
-                        <label for="status" class="block text-gray-700 font-medium mb-1">Status</label>
-                        <select wire:model="status" id="status"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
-                            <option value="">-- Pilih Status --</option>
-                            <option value="green">Hijau</option>
-                            <option value="yellow">Kuning</option>
-                            <option value="red">Merah</option>
-                            <option value="black">Hitam</option>
-                        </select>
-                    </div>
+                    
 
                     {{-- NIP --}}
                     <div>

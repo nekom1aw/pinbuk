@@ -17,6 +17,11 @@ class UserAcessController extends Controller
         // Kirim ID ke view
         return view('user.buku-detail', ['bukuId' => $id]);
     }
+    public function view($id)
+    {
+        // Kirim ID ke view
+        return view('user.buku-view', ['bukuId' => $id]);
+    }
 
     public function katalog($id)
     {

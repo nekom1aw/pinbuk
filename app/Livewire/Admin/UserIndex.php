@@ -223,7 +223,6 @@ class UserIndex extends Component
             'password' => 'required|string|min:6|confirmed',
             'foto' => 'nullable|image|max:1024',
             'jabatan' => $this->isAdmin ? 'nullable' : 'required|string|max:100',
-            'status' => $this->isAdmin ? 'nullable' : 'required|in:green,yellow,red,black',
             'nip' => $this->isAdmin ? 'nullable' : 'required|string|max:50|unique:pengguna,nip',
         ]);
 
@@ -233,13 +232,16 @@ class UserIndex extends Component
             $fotoPath = '/storage/' . $path;
         }
 
-        // Hitung jumlah admin yang sudah ada
+        // Hitung jumlah admin yang sudah ada (untuk auto-NIP)
         $nipAdmin = null;
         if ($this->isAdmin) {
             $nipAdmin = DB::table('pengguna')
                 ->where('level', 'admin')
-                ->count() + 1; // auto increment
+                ->count() + 1;
         }
+
+        // Tetapkan status otomatis
+        $status = $this->isAdmin ? 'green' : 'gray';
 
         DB::table('pengguna')->insert([
             'nip' => $this->isAdmin ? (string) $nipAdmin : $this->nip,
@@ -251,12 +253,12 @@ class UserIndex extends Component
             'jabatan' => $this->isAdmin ? 'Admin' : $this->jabatan,
             'password' => Hash::make($this->password),
             'password_plaintext' => $this->password,
-            'status' => $this->isAdmin ? 'green' : $this->status,
+            'status' => $status,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
-        // ✅ Reset form
+        // Reset form
         $this->reset([
             'nip',
             'nama',
@@ -266,12 +268,12 @@ class UserIndex extends Component
             'jabatan',
             'password',
             'password_confirmation',
-            'status'
         ]);
 
         $this->showAddModal = false;
         session()->flash('message', 'User berhasil ditambahkan.');
     }
+
 
     public function resetInput()
     {

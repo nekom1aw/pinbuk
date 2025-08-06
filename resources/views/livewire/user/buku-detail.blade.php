@@ -73,10 +73,84 @@
                         </div>
 
 
-                        <button class="mt-2 bg-gray-300 font-bold text-sm px-[0.6rem] py-[0.4rem] w-max"
-                            @click="showTerms = true"
-                            type="button">Pinjam
-                        </button>
+                        @php
+                        $cetak = $varianBuku->where('jenis_buku', 'cetak')->where('stok', '>', 0)->first();
+                        $digital = $varianBuku->where('jenis_buku', 'digital')->first();
+                        @endphp
+
+                        <div class="flex items-center gap-2 mt-2 text-sm font-bold">
+
+                            {{-- Tombol Pinjam --}}
+                            @if ($varianBuku->where('jenis_buku', 'cetak')->count() > 0)
+                            @if ($cetak && !$sudahDipinjam)
+                            <button
+                                class="bg-gray-300 px-3 py-2 min-w-[6rem] text-center hover:bg-gray-400 transition"
+                                @click="showTerms = true"
+                                type="button">
+                                Pinjam
+                            </button>
+                            @elseif ($sudahDipinjam)
+                            <button
+                                class="bg-gray-200 text-gray-500 px-3 py-2 min-w-[6rem] text-center cursor-not-allowed"
+                                type="button"
+                                disabled
+                                title="Anda sudah meminjam buku ini">
+                                Sudah Dipinjam
+                            </button>
+                            @else
+                            <button
+                                class="bg-gray-100 text-gray-400 px-3 py-2 min-w-[6rem] text-center cursor-not-allowed"
+                                type="button"
+                                disabled
+                                title="Stok buku cetak habis">
+                                Pinjam
+                            </button>
+                            @endif
+                            @else
+                            <button
+                                class="bg-gray-100 text-gray-400 px-3 py-2 min-w-[6rem] text-center cursor-not-allowed"
+                                type="button"
+                                disabled
+                                title="Buku cetak tidak tersedia">
+                                Pinjam
+                            </button>
+                            @endif
+
+                            {{-- Pemisah | --}}
+                            <span class="text-gray-400">|</span>
+
+                            {{-- Tombol Baca Buku --}}
+                            @if ($varianBuku->where('jenis_buku', 'digital')->count() > 0)
+                            @if ($digital)
+                            <a href="{{ url('/user/buku/' . $digital->id . '/view') }}">
+                                <button
+                                    class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 min-w-[6rem] text-center">
+                                    Baca Buku
+                                </button>
+                            </a>
+                            @else
+                            <button
+                                class="bg-gray-100 text-gray-400 px-3 py-2 min-w-[6rem] text-center cursor-not-allowed"
+                                type="button"
+                                disabled
+                                title="Buku digital tidak tersedia">
+                                Baca Buku
+                            </button>
+                            @endif
+                            @else
+                            <button
+                                class="bg-gray-100 text-gray-400 px-3 py-2 min-w-[6rem] text-center cursor-not-allowed"
+                                type="button"
+                                disabled
+                                title="Buku digital tidak tersedia">
+                                Baca Buku
+                            </button>
+                            @endif
+
+                        </div>
+
+
+
                     </div>
                 </div>
             </div>

@@ -99,7 +99,7 @@
                                     <div class="flex items-start">
                                         <div class="min-w-[100px] pr-2 font-medium">Stok</div>
                                         <div class="pr-1">:</div>
-                                        <div class="flex-1">{{ $buku->stok ?? '-' }}</div>
+                                        <div class="flex-1">{{ $buku->jenis_buku ?? '-' }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -136,6 +136,13 @@
                             </button>
                         </a>
 
+                        <a href="{{ url('/admin/buku/' . $buku->id . '/view') }}">
+                            <button class="bg-gray-500 hover:bg-gray-600 text-white mt-2 font-bold text-sm px-4 py-2 w-32 transition">
+                                Detail Buku
+                            </button>
+                        </a>
+
+
 
                     </div>
                     @if ($confirmingDelete)
@@ -162,21 +169,21 @@
     </div>
 
     {{-- Buku Sedang Dipinjam --}}
-    <div class="max-w-5xl mx-auto mt-10 bg-white shadow-md rounded-md p-6 border mb-10">
+    <div class="max-w-5xl mx-auto mt-10 bg-white shadow-md p-6 border mb-10">
         <h3 class="text-xl font-semibold text-gray-500 mb-4">Sedang Dipinjam</h3>
 
         @if(count($peminjamanAktif) > 0)
         <ul class="space-y-4">
             @foreach ($peminjamanAktif as $pinjam)
             <a href="{{ url('/admin/peminjaman/' . $pinjam->id . '/detail') }}" class="block">
-                <li class="border p-4 rounded-md bg-yellow-50 shadow-sm hover:bg-yellow-100 transition">
+                <li class="border p-4  bg-yellow-50 shadow-sm hover:bg-yellow-100 transition">
                     <div class="flex justify-between items-center">
                         <div>
                             <p class="text-gray-800"><strong>Nama Peminjam:</strong> {{ $pinjam->nama_peminjam ?? '-' }}</p>
                             <p class="text-gray-600"><strong>Tanggal Pinjam:</strong> {{ \Carbon\Carbon::parse($pinjam->tanggal_pinjam)->translatedFormat('d F Y') }}</p>
                             <p class="text-gray-600"><strong>Kode Unik:</strong> {{ $pinjam->kode_uniq }}</p>
                         </div>
-                        <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">
+                        <span class="px-3 py-1 bg-red-100 text-red-700  text-sm font-medium">
                             {{ $pinjam->status }}
                         </span>
                     </div>

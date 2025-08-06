@@ -5,55 +5,49 @@ namespace App\Livewire\User;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 class BukuDetail extends Component
 {
     use WithPagination;
 
-    // ===== props =====
-    public $id;          // id buku yang diklik
-    public $buku;        // detail buku
-    public $user_id;     // user login
+    public $id;
+    public $buku;
+    public $user_id;
     public $sudahDipinjam;
-
-    // ===== form pinjam =====
     public $kode_uniq;
     public $tanggal_pinjam;
     public $tanggal_kembali;
+    public $varianBuku = [];
 
-    // =====================================================================
-    // mount
-    // =====================================================================
     public function mount($id)
     {
-        // validasi user login
         $this->user_id = session('user_id');
         if (!$this->user_id) {
             abort(403, 'Unauthorized.');
         }
 
-        // simpan id buku
         $this->id = $id;
 
-        // ambil detail buku + kategori
         $this->buku = DB::table('buku')
             ->leftJoin('kategori_buku', 'buku.id_kategori_buku', '=', 'kategori_buku.id')
             ->where('buku.id', $id)
             ->selectRaw('
-        buku.*,
-        kategori_buku.nama AS nama_kategori,
-        (
-            SELECT SUM(stok)
-            FROM buku b2
-            WHERE b2.nama_buku = buku.nama_buku
-              AND b2.ringkasan = buku.ringkasan
-        ) AS total_stok
-    ')
+                buku.*,
+                kategori_buku.nama AS nama_kategori,
+                (
+                    SELECT SUM(stok)
+                    FROM buku b2
+                    WHERE b2.nama_buku = buku.nama_buku
+                      AND b2.ringkasan = buku.ringkasan
+                ) AS total_stok
+            ')
             ->first();
 
+        $this->varianBuku = DB::table('buku')
+            ->where('nama_buku', $this->buku->nama_buku)
+            ->where('ringkasan', $this->buku->ringkasan)
+            ->get();
 
-        // cek status pinjam user
         $this->sudahDipinjam = DB::table('peminjaman')
             ->where('user_id', $this->user_id)
             ->where('kode_uniq', $this->buku->kode_uniq)
@@ -61,33 +55,37 @@ class BukuDetail extends Component
             ->exists();
     }
 
-    // =====================================================================
-    // query rekomendasi, dipanggil di render agar paginate berfungsi
-    // =====================================================================
     protected function otherBooksQuery()
     {
         return DB::table('peminjaman')
             ->join('buku', 'peminjaman.kode_uniq', '=', 'buku.kode_uniq')
             ->selectRaw('
-        MIN(buku.id) as id,
-        buku.nama_buku,
-        buku.ringkasan,
-        MIN(buku.foto_buku) as foto_buku,
-        SUM(buku.stok) as total_stok,
-        COUNT(peminjaman.id) as total_pinjam
-    ')
+                MIN(buku.id) as id,
+                buku.nama_buku,
+                buku.ringkasan,
+                MIN(buku.foto_buku) as foto_buku,
+                SUM(buku.stok) as total_stok,
+                COUNT(peminjaman.id) as total_pinjam
+            ')
             ->where('buku.id', '!=', $this->id)
             ->where('buku.id_kategori_buku', $this->buku->id_kategori_buku)
             ->groupBy('buku.nama_buku', 'buku.ringkasan')
             ->orderByDesc('total_pinjam');
     }
 
-    // =====================================================================
-    // aksi pinjam
-    // =====================================================================
     public function pinjamBuku()
     {
-        // Hitung total pinjaman aktif user (request, dipinjam, silahkan diambil)
+
+        $adaJatuhTempo = DB::table('peminjaman')
+            ->where('user_id', $this->user_id)
+            ->whereRaw('LOWER(status) = ?', ['jatuh tempo'])
+            ->exists();
+
+        if ($adaJatuhTempo) {
+            session()->flash('error', 'Anda memiliki pinjaman yang jatuh tempo. Harap kembalikan terlebih dahulu sebelum meminjam buku lain.');
+            return;
+        }
+
         $jumlahPinjaman = DB::table('peminjaman')
             ->where('user_id', $this->user_id)
             ->whereIn('status', ['request', 'Dipinjam', 'Silahkan Diambil'])
@@ -98,32 +96,36 @@ class BukuDetail extends Component
             return;
         }
 
-        // Cek dobel pinjam
-        $masihDipinjam = DB::table('peminjaman')
-            ->where('user_id', $this->user_id)
-            ->where('kode_uniq', $this->buku->kode_uniq)
-            ->where('status', 'Dipinjam')
+        
+        $sudahAdaPinjamanSerupa = DB::table('peminjaman')
+            ->join('buku', 'peminjaman.kode_uniq', '=', 'buku.kode_uniq')
+            ->where('peminjaman.user_id', $this->user_id)
+            ->whereIn('peminjaman.status', ['request', 'Dipinjam', 'Silahkan Diambil'])
+            ->where('buku.nama_buku', $this->buku->nama_buku)
+            ->where('buku.ringkasan', $this->buku->ringkasan)
             ->exists();
 
-        if ($masihDipinjam) {
-            session()->flash('error', 'Anda masih meminjam buku ini.');
+        if ($sudahAdaPinjamanSerupa) {
+            session()->flash('error', 'Anda sudah memiliki peminjaman aktif untuk buku ini.');
             return;
         }
 
-        // Cek stok
-        $buku = DB::table('buku')
-            ->where('kode_uniq', $this->buku->kode_uniq)
+        $bukuCetak = DB::table('buku')
+            ->where('nama_buku', $this->buku->nama_buku)
+            ->where('ringkasan', $this->buku->ringkasan)
+            ->where('jenis_buku', 'cetak')
+            ->where('stok', '>', 0)
+            ->orderBy('id')
             ->first();
 
-        if (!$buku || $buku->stok < 1) {
-            session()->flash('error', 'Stok buku tidak tersedia.');
+        if (!$bukuCetak) {
+            session()->flash('error', 'Stok buku cetak tidak tersedia.');
             return;
         }
 
-        // Insert ke peminjaman
         DB::table('peminjaman')->insert([
             'user_id'         => $this->user_id,
-            'kode_uniq'       => $this->buku->kode_uniq,
+            'kode_uniq'       => $bukuCetak->kode_uniq,
             'tanggal_pinjam'  => now()->toDateString(),
             'tanggal_kembali' => now()->addDays(30)->toDateString(),
             'keperluan'       => ' ',
@@ -135,9 +137,8 @@ class BukuDetail extends Component
             'updated_at'      => now(),
         ]);
 
-        // Kurangi stok
         DB::table('buku')
-            ->where('kode_uniq', $this->buku->kode_uniq)
+            ->where('id', $bukuCetak->id)
             ->decrement('stok', 1);
 
         session()->flash('success', 'Permintaan peminjaman berhasil dikirim.');
@@ -147,14 +148,11 @@ class BukuDetail extends Component
     }
 
 
-
-    // =====================================================================
-    // render
-    // =====================================================================
     public function render()
     {
         return view('livewire.user.buku-detail', [
-            'otherBooks' => $this->otherBooksQuery()->paginate(10)   // 10 buku → 5 per baris × 2 baris
+            'otherBooks' => $this->otherBooksQuery()->paginate(10),
+            'varianBuku' => $this->varianBuku,
         ]);
     }
 }
