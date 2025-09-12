@@ -92,5 +92,5 @@ Route::prefix('user')->name('user.')->middleware([UserAccess::class . ':user'])-
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
