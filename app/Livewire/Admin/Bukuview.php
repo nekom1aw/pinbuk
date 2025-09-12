@@ -14,7 +14,7 @@ class BukuView extends Component
         $this->buku = DB::table('buku')->find($id);
     } 
 
-    public function render()
+    public function render() 
     {
         return view('livewire.admin.buku-view', [
             'buku' => $this->buku,
