@@ -61,7 +61,7 @@
       <div class="flex items-center justify-between w-full relative">
         <!-- Input -->
         <div class="flex-1 min-w-0 border border-black text-sm  focus:outline-none focus:ring-1 focus:ring-green-700 mr-4 sm:mr-6 md:mr-10 lg:mr-29 xl:mr-34">
-          @livewire('user.search-navbar')
+          @livewire('user.searchnavbar')
         </div>
 
 
