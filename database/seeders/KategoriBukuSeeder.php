@@ -8,59 +8,30 @@ use Illuminate\Support\Facades\DB;
 class KategoriBukuSeeder extends Seeder
 {
     /**
-     * Seed kategori beserta dua tingkat subkategori buku.
+     * Seed delapan kategori utama dengan ID tetap agar URL katalog konsisten.
      */
     public function run(): void
     {
-        $data = [
-            'Teknologi' => [
-                'Pemrograman' => ['Web', 'Mobile'],
-                'Data dan AI' => ['Data Science', 'Kecerdasan Buatan'],
-            ],
-            'Bisnis' => [
-                'Manajemen' => ['Kepemimpinan', 'Operasional'],
-                'Keuangan' => ['Akuntansi', 'Investasi'],
-            ],
-            'Pendidikan' => [
-                'Pengembangan Diri' => ['Komunikasi', 'Produktivitas'],
-                'Referensi' => ['Metodologi', 'Bahasa'],
-            ],
-            'Fiksi' => [
-                'Novel' => ['Indonesia', 'Terjemahan'],
-                'Cerita Pendek' => ['Klasik', 'Modern'],
-            ],
+        $categories = [
+            1 => 'Hutan',
+            2 => 'Kebun',
+            3 => 'Tambang & Energi',
+            4 => 'Laut',
+            5 => 'Hukum',
+            6 => 'Keuangan',
+            7 => 'Novel',
+            8 => 'Lainnya',
         ];
 
-        $now = now();
-
-        foreach ($data as $kategoriNama => $subKategori) {
+        foreach ($categories as $id => $name) {
             DB::table('kategori_buku')->updateOrInsert(
-                ['nama' => $kategoriNama],
-                ['updated_at' => $now, 'created_at' => $now]
+                ['id' => $id],
+                [
+                    'nama' => $name,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
             );
-
-            $kategoriId = DB::table('kategori_buku')
-                ->where('nama', $kategoriNama)
-                ->value('id');
-
-            foreach ($subKategori as $sub1Nama => $sub2List) {
-                DB::table('sub_kategori_buku1')->updateOrInsert(
-                    ['nama' => $sub1Nama, 'id_kategori' => $kategoriId],
-                    ['updated_at' => $now, 'created_at' => $now]
-                );
-
-                $sub1Id = DB::table('sub_kategori_buku1')
-                    ->where('nama', $sub1Nama)
-                    ->where('id_kategori', $kategoriId)
-                    ->value('id');
-
-                foreach ($sub2List as $sub2Nama) {
-                    DB::table('sub_kategori_buku2')->updateOrInsert(
-                        ['nama' => $sub2Nama, 'id_sub_kategori1' => $sub1Id],
-                        ['updated_at' => $now, 'created_at' => $now]
-                    );
-                }
-            }
         }
     }
 }

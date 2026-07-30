@@ -17,7 +17,7 @@
       'bottom' => 'object-bottom',
       default => 'object-center'
       };
-      $foto = $bukus->foto_buku ? asset('storage/' . $bukus->foto_buku) : asset('images/placeholder.png');
+      $foto = $bukus->foto_buku ? asset($bukus->foto_buku) : asset('images/placeholder.png');
       @endphp
 
       <a
@@ -41,7 +41,7 @@
         <!-- Gambar -->
         <div class="flex-1 bg-gray-600 w-full flex items-center justify-center overflow-hidden">
           <img
-            src="{{ $bukus->foto_buku ? asset('storage/' . $bukus->foto_buku) : asset('images/placeholder.png') }}"
+            src="{{ $foto }}"
             alt="{{ $bukus->nama_buku }}"
             class="w-full h-full object-cover {{ match($bukus->position_foto ?? 'center') {
         'top' => 'object-top',

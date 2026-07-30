@@ -8,66 +8,183 @@ use Illuminate\Support\Facades\DB;
 class BukuSeeder extends Seeder
 {
     /**
-     * Seed koleksi buku contoh untuk katalog dan peminjaman.
+     * Seed 10 judul populer untuk setiap kategori utama.
      */
     public function run(): void
     {
-        $books = [
-            ['B-00001', 'Laravel untuk Pemula', 'Ahmad Fauzi', 2024, 'Informatika', 'Teknologi', 'Pemrograman', 'Web', 5, 'Baru', ['laravel', 'php', 'web']],
-            ['B-00002', 'Membangun API Modern', 'Rina Kurnia', 2023, 'Media Digital', 'Teknologi', 'Pemrograman', 'Web', 3, 'Baru', ['api', 'backend', 'web']],
-            ['B-00003', 'Aplikasi Mobile Praktis', 'Dedi Irawan', 2022, 'Tekno Press', 'Teknologi', 'Pemrograman', 'Mobile', 4, 'Bekas', ['mobile', 'aplikasi']],
-            ['B-00004', 'Dasar Data Science', 'Nina Oktavia', 2024, 'Data Nusantara', 'Teknologi', 'Data dan AI', 'Data Science', 2, 'Baru', ['data', 'statistik']],
-            ['B-00005', 'Kecerdasan Buatan Terapan', 'Bagus Maulana', 2025, 'Cerdas Media', 'Teknologi', 'Data dan AI', 'Kecerdasan Buatan', 3, 'Baru', ['ai', 'machine-learning']],
-            ['B-00006', 'Seni Memimpin Tim', 'Indra Gunawan', 2021, 'Bisnis Utama', 'Bisnis', 'Manajemen', 'Kepemimpinan', 4, 'Bekas', ['manajemen', 'leadership']],
-            ['B-00007', 'Manajemen Operasional', 'Sarah Amelia', 2020, 'Mitra Bisnis', 'Bisnis', 'Manajemen', 'Operasional', 2, 'Bekas', ['operasional', 'bisnis']],
-            ['B-00008', 'Akuntansi Sederhana', 'Hendra Saputra', 2023, 'Finansial Press', 'Bisnis', 'Keuangan', 'Akuntansi', 5, 'Baru', ['akuntansi', 'keuangan']],
-            ['B-00009', 'Investasi untuk Semua', 'Maya Permata', 2024, 'Finansial Press', 'Bisnis', 'Keuangan', 'Investasi', 3, 'Baru', ['investasi', 'keuangan']],
-            ['B-00010', 'Komunikasi Efektif', 'Tania Putri', 2022, 'Edu Media', 'Pendidikan', 'Pengembangan Diri', 'Komunikasi', 4, 'Bekas', ['komunikasi', 'softskill']],
-            ['B-00011', 'Produktif Tanpa Stres', 'Reza Prakoso', 2025, 'Edu Media', 'Pendidikan', 'Pengembangan Diri', 'Produktivitas', 3, 'Baru', ['produktivitas', 'pengembangan-diri']],
-            ['B-00012', 'Metodologi Penelitian', 'Prof. Ari Wibowo', 2021, 'Akademia', 'Pendidikan', 'Referensi', 'Metodologi', 5, 'Bekas', ['penelitian', 'referensi']],
-            ['B-00013', 'Senja di Jakarta', 'Larasati', 2020, 'Pustaka Kita', 'Fiksi', 'Novel', 'Indonesia', 2, 'Bekas', ['novel', 'indonesia']],
-            ['B-00014', 'Perjalanan Sang Penemu', 'Daniel Hartono', 2023, 'Pustaka Dunia', 'Fiksi', 'Novel', 'Terjemahan', 3, 'Baru', ['novel', 'terjemahan']],
-            ['B-00015', 'Kumpulan Cerita Hari Ini', 'Ayu Sekar', 2024, 'Pustaka Kita', 'Fiksi', 'Cerita Pendek', 'Modern', 4, 'Baru', ['cerpen', 'modern']],
+        $catalog = [
+            1 => [
+                'category' => 'Hutan',
+                'cover' => 'hutan.png',
+                'publisher' => 'Environmental Library',
+                'books' => [
+                    ['The Hidden Life of Trees', 'Peter Wohlleben', 2015],
+                    ['The Overstory', 'Richard Powers', 2018],
+                    ['The Forest Unseen', 'David George Haskell', 2012],
+                    ['Finding the Mother Tree', 'Suzanne Simard', 2021],
+                    ['The Man Who Planted Trees', 'Jean Giono', 1953],
+                    ['Braiding Sweetgrass', 'Robin Wall Kimmerer', 2013],
+                    ['The Songs of Trees', 'David George Haskell', 2017],
+                    ['Forest Bathing', 'Qing Li', 2018],
+                    ['The Secret Wisdom of Nature', 'Peter Wohlleben', 2017],
+                    ['Tropical Rain Forest Ecology, Diversity, and Conservation', 'Jaboury Ghazoul dan Douglas Sheil', 2010],
+                ],
+            ],
+            2 => [
+                'category' => 'Kebun',
+                'cover' => 'kebun.png',
+                'publisher' => 'Sustainable Agriculture Library',
+                'books' => [
+                    ['The One-Straw Revolution', 'Masanobu Fukuoka', 1978],
+                    ["Gaia's Garden", 'Toby Hemenway', 2001],
+                    ["Permaculture: A Designer's Manual", 'Bill Mollison', 1988],
+                    ['The New Organic Grower', 'Eliot Coleman', 1989],
+                    ['The Market Gardener', 'Jean-Martin Fortier', 2014],
+                    ['Teaming with Microbes', 'Jeff Lowenfels dan Wayne Lewis', 2006],
+                    ['The Botany of Desire', 'Michael Pollan', 2001],
+                    ["The Omnivore's Dilemma", 'Michael Pollan', 2006],
+                    ['The Resilient Farm and Homestead', 'Ben Falk', 2013],
+                    ['Edible Forest Gardens', 'Dave Jacke dan Eric Toensmeier', 2005],
+                ],
+            ],
+            3 => [
+                'category' => 'Tambang & Energi',
+                'cover' => 'tambang-energi.png',
+                'publisher' => 'Energy and Resources Library',
+                'books' => [
+                    ['Energy and Civilization: A History', 'Vaclav Smil', 2017],
+                    ['The Prize', 'Daniel Yergin', 1991],
+                    ['The Quest', 'Daniel Yergin', 2011],
+                    ['Sustainable Energy – Without the Hot Air', 'David J. C. MacKay', 2008],
+                    ['The Grid', 'Gretchen Bakke', 2016],
+                    ['This Changes Everything', 'Naomi Klein', 2014],
+                    ['Mining Economics and Strategy', 'Ian C. Runge', 1998],
+                    ['Renewable Energy: Power for a Sustainable Future', 'Godfrey Boyle', 2012],
+                    ['The New Map', 'Daniel Yergin', 2020],
+                    ['Material World', 'Ed Conway', 2023],
+                ],
+            ],
+            4 => [
+                'category' => 'Laut',
+                'cover' => 'laut.png',
+                'publisher' => 'Marine Conservation Library',
+                'books' => [
+                    ['The Sea Around Us', 'Rachel Carson', 1951],
+                    ['The Soul of an Octopus', 'Sy Montgomery', 2015],
+                    ['Blue Mind', 'Wallace J. Nichols', 2014],
+                    ['The Unnatural History of the Sea', 'Callum Roberts', 2007],
+                    ['Cod', 'Mark Kurlansky', 1997],
+                    ['The Outlaw Ocean', 'Ian Urbina', 2019],
+                    ['Marine Biology', 'Peter Castro dan Michael E. Huber', 2018],
+                    ['Ocean of Life', 'Callum Roberts', 2012],
+                    ['The Brilliant Abyss', 'Helen Scales', 2021],
+                    ['Other Minds', 'Peter Godfrey-Smith', 2016],
+                ],
+            ],
+            5 => [
+                'category' => 'Hukum',
+                'cover' => 'hukum.png',
+                'publisher' => 'Law and Policy Library',
+                'books' => [
+                    ['The Concept of Law', 'H. L. A. Hart', 1961],
+                    ['The Rule of Law', 'Tom Bingham', 2010],
+                    ['Justice: What Is the Right Thing to Do?', 'Michael J. Sandel', 2009],
+                    ['Environmental Law', 'Stuart Bell dan Donald McGillivray', 2008],
+                    ['Hukum Lingkungan di Indonesia', 'Takdir Rahmadi', 2011],
+                    ['Pengantar Ilmu Hukum', 'Peter Mahmud Marzuki', 2008],
+                    ['Ilmu Hukum', 'Satjipto Rahardjo', 1982],
+                    ['Hukum Agraria Indonesia', 'Boedi Harsono', 1997],
+                    ['Pure Theory of Law', 'Hans Kelsen', 1960],
+                    ['The Environmental Rights Revolution', 'David R. Boyd', 2012],
+                ],
+            ],
+            6 => [
+                'category' => 'Keuangan',
+                'cover' => 'keuangan.png',
+                'publisher' => 'Finance Library',
+                'books' => [
+                    ['The Intelligent Investor', 'Benjamin Graham', 1949],
+                    ['Rich Dad Poor Dad', 'Robert T. Kiyosaki', 1997],
+                    ['The Psychology of Money', 'Morgan Housel', 2020],
+                    ['A Random Walk Down Wall Street', 'Burton G. Malkiel', 1973],
+                    ['Common Stocks and Uncommon Profits', 'Philip Fisher', 1958],
+                    ['One Up On Wall Street', 'Peter Lynch', 1989],
+                    ['Your Money or Your Life', 'Vicki Robin dan Joe Dominguez', 1992],
+                    ['The Millionaire Next Door', 'Thomas J. Stanley dan William D. Danko', 1996],
+                    ['Principles', 'Ray Dalio', 2017],
+                    ['The Little Book of Common Sense Investing', 'John C. Bogle', 2007],
+                ],
+            ],
+            7 => [
+                'category' => 'Novel',
+                'cover' => 'novel.png',
+                'publisher' => 'Literature Library',
+                'books' => [
+                    ['Laskar Pelangi', 'Andrea Hirata', 2005],
+                    ['Bumi Manusia', 'Pramoedya Ananta Toer', 1980],
+                    ['Laut Bercerita', 'Leila S. Chudori', 2017],
+                    ['Negeri 5 Menara', 'Ahmad Fuadi', 2009],
+                    ['Ronggeng Dukuh Paruk', 'Ahmad Tohari', 1982],
+                    ['Cantik Itu Luka', 'Eka Kurniawan', 2002],
+                    ['1984', 'George Orwell', 1949],
+                    ['To Kill a Mockingbird', 'Harper Lee', 1960],
+                    ['The Alchemist', 'Paulo Coelho', 1988],
+                    ['The Little Prince', 'Antoine de Saint-Exupéry', 1943],
+                ],
+            ],
+            8 => [
+                'category' => 'Lainnya',
+                'cover' => 'lainnya.png',
+                'publisher' => 'General Knowledge Library',
+                'books' => [
+                    ['Sapiens', 'Yuval Noah Harari', 2011],
+                    ['Homo Deus', 'Yuval Noah Harari', 2015],
+                    ['Atomic Habits', 'James Clear', 2018],
+                    ['Thinking, Fast and Slow', 'Daniel Kahneman', 2011],
+                    ['Ikigai', 'Héctor García dan Francesc Miralles', 2016],
+                    ['Factfulness', 'Hans Rosling', 2018],
+                    ['A Brief History of Time', 'Stephen Hawking', 1988],
+                    ['Cosmos', 'Carl Sagan', 1980],
+                    ['Guns, Germs, and Steel', 'Jared Diamond', 1997],
+                    ["Man's Search for Meaning", 'Viktor E. Frankl', 1946],
+                ],
+            ],
         ];
 
-        $now = now();
+        foreach ($catalog as $categoryId => $group) {
+            foreach ($group['books'] as $bookIndex => [$title, $author, $year]) {
+                $sequence = (($categoryId - 1) * 10) + $bookIndex + 1;
+                $code = 'B-'.str_pad((string) $sequence, 5, '0', STR_PAD_LEFT);
 
-        foreach ($books as [$kode, $judul, $penulis, $tahun, $penerbit, $kategori, $sub1, $sub2, $stok, $kondisi, $tags]) {
-            $kategoriId = DB::table('kategori_buku')->where('nama', $kategori)->value('id');
-            $sub1Id = DB::table('sub_kategori_buku1')
-                ->where('nama', $sub1)
-                ->where('id_kategori', $kategoriId)
-                ->value('id');
-            $sub2Id = DB::table('sub_kategori_buku2')
-                ->where('nama', $sub2)
-                ->where('id_sub_kategori1', $sub1Id)
-                ->value('id');
-
-            DB::table('buku')->updateOrInsert(
-                ['kode_uniq' => $kode],
-                [
-                    'nama_buku' => $judul,
-                    'penulis' => $penulis,
-                    'terbit_tahun' => $tahun,
-                    'penerbit' => $penerbit,
-                    'ringkasan' => "Buku contoh {$judul} untuk pengujian katalog dan transaksi peminjaman.",
-                    'foto_buku' => null,
-                    'file' => null,
-                    'jenis_buku' => 'cetak',
-                    'position_foto' => 'center',
-                    'id_kategori_buku' => $kategoriId,
-                    'sub_kategori1' => $sub1Id,
-                    'sub_kategori2' => $sub2Id,
-                    'stok' => $stok,
-                    'tampil' => 'ya',
-                    'qr_code' => null,
-                    'kondisi' => $kondisi,
-                    'catatan' => 'Data buku contoh dari seeder.',
-                    'tags' => json_encode($tags),
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                ]
-            );
+                DB::table('buku')->updateOrInsert(
+                    ['kode_uniq' => $code],
+                    [
+                        'nama_buku' => $title,
+                        'penulis' => $author,
+                        'terbit_tahun' => $year,
+                        'penerbit' => $group['publisher'],
+                        'ringkasan' => "Koleksi populer kategori {$group['category']} karya {$author}. Data ini disiapkan sebagai contoh katalog dan dapat dilengkapi dengan sinopsis serta sampul resmi.",
+                        'foto_buku' => "/images/book-covers/books/{$code}.jpg",
+                        'file' => null,
+                        'jenis_buku' => 'cetak',
+                        'position_foto' => 'center',
+                        'id_kategori_buku' => $categoryId,
+                        'sub_kategori1' => null,
+                        'sub_kategori2' => null,
+                        'stok' => ($bookIndex % 5) + 1,
+                        'tampil' => 'ya',
+                        'qr_code' => null,
+                        'kondisi' => $bookIndex % 3 === 0 ? 'Bekas' : 'Baru',
+                        'catatan' => 'Data buku populer dari BukuSeeder.',
+                        'tags' => json_encode([
+                            strtolower(str_replace([' ', '&'], ['-', 'dan'], $group['category'])),
+                            'koleksi-populer',
+                        ]),
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]
+                );
+            }
         }
     }
 }
